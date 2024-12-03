@@ -28,7 +28,7 @@
         class="fas fa-shopping-basket"
         style="margin-right: 10px; font-size: 1.7rem"
       ></i
-      >E-SHOP</a
+      >Book Hub</a
     >
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -39,11 +39,11 @@
           <a class="nav-link" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/products">Products</a>
+          <a class="nav-link" href="/products">Books </a>
         </li>
         <% if (currentUser && currentUser.role==='seller') { %>
         <li class="nav-item">
-          <a class="nav-link" href="/products/new" tabindex="-1" aria-disabled="true">New</a>
+          <a class="nav-link" href="/products/new" tabindex="-1" aria-disabled="true">Add New Book</a>
         </li>
         <% } %>
       </ul>

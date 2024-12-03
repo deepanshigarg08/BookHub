@@ -24,7 +24,7 @@ router.post('/products/:productid/review',isLoggedIn, validateReview,async (req,
         await product.save();
         
         // console.log(product.reviews);
-        req.flash('success','Your Review is Added SuccessFully!!!')
+        req.flash('Your thoughts about this book is added ')
         res.redirect(`/products/${productid}`);
     }
 

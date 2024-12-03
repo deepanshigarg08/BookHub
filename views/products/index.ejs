@@ -3,51 +3,110 @@
 <section class="container">
   <%- include('../partials/flash') %>
 
-  <div class="row products">
-    <%for(let product of products){%>
-    <div class="col-lg-4 mb-3">
-      <div class="card text-center shadow-sm mx-auto" style="width: 18rem">
-        <img src="<%=product.img%>" class="card-img-top" alt="item image" />
-        <span
-          class="badge rounded-pill bg-light text-dark w-25 position-absolute translate-middle-y"
-          style="top: 41%; left: 5%"
-          ><%=product.avgRating%> &star; | <%=product.reviews.length%></span
-        >
-        <div class="card-body">
-          <h5
-            class="card-title d-flex justify-content-between align-items-center"
-          >
-            <span><%= product.name %></span>
-            <span class="btn like-button" product-id=<%=product._id%>>
-            <% if (currentUser && currentUser.wishList.includes(product._id)) { %>
-              <i class="fas fa-heart"></i>
-              <% } else { %>
-                  <i class="far fa-heart"></i>
-                  <% } %>
-                </span>
-              </h5>
-          <p class="card-text"><%= product.desc.substring(0,100) %>...</p>
-          <% if(product.reviews.length){ %>
-          <p class="text-muted"><%=product.reviews.length%> reviews</p>
-          <%}else{%>
-          <p class="text-muted">No reviews</p>
-          <% } %>
+  <!-- Search bar -->
+  <div class="row my-4">
+    <div class="col-md-8 offset-md-2">
+      <input
+        type="text"
+        id="searchInput"
+        class="form-control"
+        placeholder="Search for products..."
+        style="flex-grow: 1; padding: 10px; border-radius: 5px 0 0 5px; border: 1px solid #ccc;"
+      />
+    </div>
+  </div>
 
-          <h6 class="card-title">
-            <span class="fw-lighter fs-6 text-decoration-line-through"
-              >$<%= 2*product.price %></span
-            >
-            $<%= product.price %>
-            <span class="fw-light fs-6 text-warning">( 50 % OFF )</span>
-          </h6>
-          <a href="/products/<%=product._id%>" class="btn btn-info btn-sm"
-            >Buy Now</a
+  <!-- Product Grid -->
+  <div class="row products" id="productGrid">
+    <% for (let product of products) { %>
+      <div class="col-lg-4 mb-3 product-card" data-name="<%= product.name.toLowerCase() %>">
+        <div class="card text-center shadow-sm mx-auto" style="width: 18rem; height: 100%; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 10px;">
+          <img src="<%= product.img %>" class="card-img-top" alt="item image" style="height: 200px;" />
+          <span
+            class="badge rounded-pill bg-light text-dark w-25 position-absolute translate-middle-y"
+            style="top: 41%; left: 5%; background-color: rgba(255, 255, 255, 0.8); font-size: 0.9rem; padding: 8px 12px; border-radius: 20px; font-weight: 500;"
           >
+            <%= product.avgRating %> &star; | <%= product.reviews.length %>
+          </span>
+          <div class="card-body" style="flex-grow: 1; padding: 15px;">
+            <h5 class="card-title d-flex justify-content-between align-items-center" style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px;">
+              <span><%= product.name %></span>
+              <span class="btn like-button" product-id="<%= product._id %>" style="cursor: pointer; color: #888; transition: color 0.3s ease;">
+                <% if (currentUser && currentUser.wishList.includes(product._id)) { %>
+                  <i class="fas fa-heart" style="color: #dc3545;"></i>
+                <% } else { %>
+                  <i class="far fa-heart"></i>
+                <% } %>
+              </span>
+            </h5>
+            <p class="card-text" style="font-size: 0.9rem; color: #666; margin-bottom: 12px;"><%= product.desc.substring(0, 100) %>...</p>
+            <% if (product.reviews.length) { %>
+            <p class="text-muted" style="font-size: 0.85rem;"><%= product.reviews.length %> reviews</p>
+            <% } else { %>
+            <p class="text-muted" style="font-size: 0.85rem;">No reviews</p>
+            <% } %>
+
+            <h6 class="card-title" style="font-size: 1rem; font-weight: 600; margin-bottom: 10px;">
+              <span class="fw-lighter fs-6 text-decoration-line-through">$<%= 2 * product.price %></span>
+              $<%= product.price %>
+              <span class="fw-light fs-6 text-warning">( 50 % OFF )</span>
+            </h6>
+            <a href="/products/<%= product._id %>" class="btn btn-info btn-sm" style="background-color: #17a2b8; color: white; padding: 8px 15px; border-radius: 5px; font-size: 0.85rem; transition: background-color 0.3s ease, transform 0.3s ease;">Buy Now</a>
+          </div>
         </div>
       </div>
-    </div>
-    <%}%>
+    <% } %>
   </div>
 </section>
 
 <script src="/JS/common.js"></script>
+
+<script>
+// Client-side search functionality
+document.getElementById('searchInput').addEventListener('input', function(event) {
+  const query = event.target.value.toLowerCase(); // Get the search query and convert it to lowercase
+  const productCards = document.querySelectorAll('.product-card'); // Get all the product cards
+
+  // Loop through each product card
+  productCards.forEach(function(card) {
+    const productName = card.getAttribute('data-name'); // Get the product name from the data attribute
+    if (productName.includes(query)) {
+      card.style.display = 'block'; // Show the card if it matches the query
+    } else {
+      card.style.display = 'none'; // Hide the card if it doesn't match
+    }
+  });
+});
+</script>
+
+<style>
+  /* Hover effect for the card */
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Fix the card height and make sure all cards are the same size */
+  .col-lg-4 {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Ensures all card bodies expand equally */
+  .card-body {
+    flex-grow: 1;
+  }
+
+  /* Buy Now button hover effect */
+  .btn-info:hover {
+    background-color: #138496;
+    transform: translateY(-3px);
+  }
+
+  /* Search bar focus effect */
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #17a2b8;
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
+  }
+</style>

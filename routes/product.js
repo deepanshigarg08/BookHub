@@ -31,7 +31,7 @@ router.post('/products',isLoggedIn,isSeller,validateProduct,async (req, res) => 
         // console.log('hi1');
         const { name, img, desc, price } = req.body;
         await Product.create({ name, img, price: parseFloat(price),author:req.user._id, desc });
-        req.flash('success','Product Added SuccessFullyyyyy!!!');
+        req.flash('success','Book Added SuccessFullyyyyy!!!');
         // console.log('hi2');
         res.redirect('/products');
     }
@@ -74,7 +74,7 @@ router.patch('/products/:id',validateProduct,isLoggedIn,isProductAuthor,async (r
         const { id } = req.params;
         const { name, price, img, desc } = req.body;
         await Product.findByIdAndUpdate(id, { name, price, desc, img });
-        req.flash('success','Product Editted SuccessFully!!!')
+        req.flash('success','Book Editted SuccessFully!!!')
         res.redirect(`/products/${id}`);
     }
     catch (e) {
@@ -89,7 +89,7 @@ router.delete('/products/:id', isLoggedIn,isProductAuthor,async (req, res) => {
     try {
         const { id } = req.params;
         await Product.findByIdAndDelete(id);
-        req.flash('success','Product Deleted Succeddfully!')
+        req.flash('success','Book Deleted Succeddfully!')
         res.redirect('/products');
     }
     catch (e) {

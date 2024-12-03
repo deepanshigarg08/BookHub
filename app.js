@@ -46,6 +46,8 @@ const sessionConfig = {
   }
 }
 
+
+
 app.use(session(sessionConfig));
 app.use(flash());
 
